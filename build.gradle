@@ -32,6 +32,9 @@ dependencies {
 	
 	implementation("com.google.guava:guava:31.1-jre")
 
+	implementation("io.github.palexdev:materialfx:11.13.5")
+	implementation("org.controlsfx:controlsfx:11.1.2")
+
 	testImplementation 'org.junit.jupiter:junit-jupiter'
 	testImplementation 'org.assertj:assertj-core'
 	testImplementation 'org.mockito:mockito-core'
