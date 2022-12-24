@@ -1,0 +1,26 @@
+# Akihiko Combos
+#
+# Command List
+# B+D				Double Upper
+# 236A 236B 236AB	Kill Rush
+# 214A 214B	214AB	Dodge Strike, Assault Dive
+# 6A 6B	6AB			Corkscrew
+# 4A 4B 4AB			Boomerang Hook
+# 8A 8B 8AB			Sonic Punch
+# 236C 236D 236CD	Duck
+# 6C 6D 6CD			Duck
+# 214C 214D 214CD 	Weave
+# 4C 4D 4CD			Weave
+#
+# 236236A 236236A 236236AB	Cyclone Upper
+# 236236C 236236D 236236CD	Thunder Fists
+# 214214C 214214D 214214CD	Maziodyne
+# 222CD						Earth Breaker
+
+###################
+# 5A Starts
+###################
+
+# DMG:	METER:
+5a.bnb.1 =   5A > 5A > 2B > 5B > 236A > 8A > 4A > 4C > 6A
+5a.bnb.1.min =  3    3    3    3      3    3    3    3

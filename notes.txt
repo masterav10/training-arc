@@ -1,0 +1,16 @@
+=== Goals ===
+
+Training Mode
+
+1) Design and test combos with various characters.
+2) Practice against blockstrings.
+
+Quality of Life
+
+1) Select and override controllers
+2) Record controller inputs
+
+Replay
+
+1) Split videos
+2) Overlay controls

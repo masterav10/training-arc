@@ -1,0 +1,45 @@
+plugins {
+	id 'eclipse'
+	id 'java-library'
+	id 'java-test-fixtures'
+}
+
+group = 'org.immersed.training-arc'
+version = 1.0
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+	api platform("org.springframework.boot:spring-boot-dependencies:3.0.0")
+	
+	api("org.bytedeco:ffmpeg:5.1.2-1.5.8")
+	runtimeOnly("org.bytedeco:ffmpeg:5.1.2-1.5.8:windows-x86_64")
+	
+	api("org.bytedeco:systems:1.5.8")
+	runtimeOnly("org.bytedeco:systems:1.5.8:windows-x86_64")
+	
+	api("org.bytedeco.presets:immersed-presets-windows:1.5.8")
+	implementation("org.bytedeco.presets:immersed-presets-windows:1.5.8:windows-x86_64")
+	
+	api("org.bytedeco.presets:immersed-presets-vigemclient:1.21.222.0-1.5.8")
+	implementation("org.bytedeco.presets:immersed-presets-vigemclient:1.21.222.0-1.5.8:windows-x86_64")
+	
+	implementation("org.springframework.boot:spring-boot-starter")
+	implementation("io.projectreactor:reactor-core")
+	
+	implementation("com.google.guava:guava:31.1-jre")
+
+	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testImplementation 'org.assertj:assertj-core'
+	testImplementation 'org.mockito:mockito-core'
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
