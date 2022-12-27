@@ -63,6 +63,7 @@ public class PS4ControllerEmulator extends Application
         BUTTONS.put(XUSB_GAMEPAD_LEFT_THUMB, DS4_BUTTON_THUMB_LEFT);
         BUTTONS.put(XUSB_GAMEPAD_RIGHT_THUMB, DS4_BUTTON_THUMB_RIGHT);
 
+        BUTTONS.put(DS4_SPECIAL_BUTTON_PS, DS4_SPECIAL_BUTTON_PS);
     }
 
     public static void main(String... args)
