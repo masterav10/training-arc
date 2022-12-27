@@ -3,7 +3,6 @@ package org.pfc.tarc;
 import static org.bytedeco.vigem.preset.vigemspec.*;
 import static org.bytedeco.vigemclient.global.vigemclient.*;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -36,7 +35,7 @@ import javafx.stage.Stage;
 public class PS4ControllerEmulator extends Application
 {
     private static final Map<Integer, Integer> DPAD = new LinkedHashMap<>();
-    private static final Map<Integer, Integer> BUTTONS = new HashMap<>();
+    private static final Map<Integer, Integer> BUTTONS = new LinkedHashMap<>();
 
     static
     {
@@ -62,8 +61,6 @@ public class PS4ControllerEmulator extends Application
 
         BUTTONS.put(XUSB_GAMEPAD_LEFT_THUMB, DS4_BUTTON_THUMB_LEFT);
         BUTTONS.put(XUSB_GAMEPAD_RIGHT_THUMB, DS4_BUTTON_THUMB_RIGHT);
-
-        BUTTONS.put(DS4_SPECIAL_BUTTON_PS, DS4_SPECIAL_BUTTON_PS);
     }
 
     public static void main(String... args)
@@ -115,12 +112,31 @@ public class PS4ControllerEmulator extends Application
                 out.Report_bThumbRX((byte) (in.sThumbRX() / 256 + Byte.MAX_VALUE + 1));
                 out.Report_bThumbRY((byte) (255 - (in.sThumbRY() / 256 + Byte.MAX_VALUE + 1)));
 
-                short wButtonsOut = (short) (pad(in) | buttons(in));
-                out.Report_wButtons(wButtonsOut);
+                int padOut = pad(in);
+                int buttonsOut = buttons(in);
+                int triggers = triggers(in);
+                out.Report_wButtons((short) (padOut | buttonsOut | triggers));
 
                 check(vigem_target_ds4_update_ex(client, pad, out));
 
                 LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(1L));
+            }
+
+            private int triggers(XINPUT_GAMEPAD in)
+            {
+                int triggerOut = 0;
+
+                if (Byte.toUnsignedInt(in.bLeftTrigger()) > 200)
+                {
+                    triggerOut |= DS4_BUTTON_TRIGGER_LEFT;
+                }
+
+                if (Byte.toUnsignedInt(in.bRightTrigger()) > 200)
+                {
+                    triggerOut |= DS4_BUTTON_TRIGGER_RIGHT;
+                }
+
+                return triggerOut;
             }
 
             private int pad(XINPUT_GAMEPAD in)
@@ -144,7 +160,7 @@ public class PS4ControllerEmulator extends Application
             {
                 int wButtonsIn = in.wButtons();
                 int wButtonsOut = 0;
-                
+
                 for (Entry<Integer, Integer> entry : BUTTONS.entrySet())
                 {
                     int xbox = entry.getKey();
