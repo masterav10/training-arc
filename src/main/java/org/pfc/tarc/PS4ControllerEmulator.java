@@ -54,7 +54,6 @@ public class PS4ControllerEmulator extends Application
         BUTTONS.put(XUSB_GAMEPAD_Y, DS4_BUTTON_TRIANGLE);
 
         BUTTONS.put(XUSB_GAMEPAD_START, DS4_BUTTON_OPTIONS);
-        BUTTONS.put(XUSB_GAMEPAD_BACK, DS4_BUTTON_SHARE);
 
         BUTTONS.put(XUSB_GAMEPAD_LEFT_SHOULDER, DS4_BUTTON_SHOULDER_LEFT);
         BUTTONS.put(XUSB_GAMEPAD_RIGHT_SHOULDER, DS4_BUTTON_SHOULDER_RIGHT);
@@ -65,6 +64,8 @@ public class PS4ControllerEmulator extends Application
 
     public static void main(String... args)
     {
+        System.setProperty("javafx.animation.fullspeed", "false");
+
         launch(PS4ControllerEmulator.class);
     }
 
@@ -117,9 +118,24 @@ public class PS4ControllerEmulator extends Application
                 int triggers = triggers(in);
                 out.Report_wButtons((short) (padOut | buttonsOut | triggers));
 
+                byte specials = special(in);
+                out.Report_bSpecial(specials);
+
                 check(vigem_target_ds4_update_ex(client, pad, out));
 
                 LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(1L));
+            }
+
+            private byte special(XINPUT_GAMEPAD in)
+            {
+                int wButtonsIn = in.wButtons();
+
+                if ((XUSB_GAMEPAD_BACK & wButtonsIn) == XUSB_GAMEPAD_BACK)
+                {
+                    return DS4_SPECIAL_BUTTON_TOUCHPAD;
+                }
+
+                return 0;
             }
 
             private int triggers(XINPUT_GAMEPAD in)
