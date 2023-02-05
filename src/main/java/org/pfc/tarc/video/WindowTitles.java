@@ -1,10 +1,10 @@
 package org.pfc.tarc.video;
 
-import java.io.Closeable;
-
 import org.bytedeco.javacpp.CharPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.winuser.WNDENUMPROC;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Callback to capture the list of windows with a title. Only applied to the top
@@ -13,13 +13,20 @@ import org.bytedeco.winuser.WNDENUMPROC;
  * @author Dan Avila
  *
  */
-public class WindowTitles implements Closeable
+@Component
+public class WindowTitles
 {
     private final WNDENUMPROC callback;
     private final CharPointer lpString;
     private final WindowNativeTools tools;
 
     private volatile boolean found = false;
+
+    @Autowired
+    WindowTitles(String applicationName)
+    {
+        this(applicationName, new WindowNativeTools());
+    }
 
     /**
      * Creates a new callback that will search for the provided application title.
@@ -29,7 +36,7 @@ public class WindowTitles implements Closeable
      */
     public WindowTitles(String applicationName, WindowNativeTools tools)
     {
-        this.lpString = new CharPointer(applicationName.length());
+        this.lpString = new CharPointer(applicationName.length() + 1L);
         this.tools = tools;
 
         this.callback = new WNDENUMPROC()
@@ -71,7 +78,6 @@ public class WindowTitles implements Closeable
         return found;
     }
 
-    @Override
     public void close()
     {
         this.callback.deallocate();

@@ -20,8 +20,9 @@ class WindowTitlesTest
         final String applicationName = "app";
         final WindowNativeTools tools = mock(WindowNativeTools.class);
 
-        try (WindowTitles callback = new WindowTitles(applicationName, tools);
-                CharPointer ptrRef = new CharPointer(applicationName.length()))
+        WindowTitles callback = new WindowTitles(applicationName, tools);
+
+        try (CharPointer ptrRef = new CharPointer(applicationName.length()))
         {
             doAnswer(a ->
             {
@@ -47,7 +48,10 @@ class WindowTitlesTest
 
             callback.searchForTitle();
             assertThat(callback.isWindowWithTitleFound()).isFalse();
-
+        }
+        finally
+        {
+            callback.close();
         }
     }
 }
