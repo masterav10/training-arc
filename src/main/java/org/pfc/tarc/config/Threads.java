@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PreDestroy;
 import javafx.application.Platform;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
@@ -19,18 +20,32 @@ public class Threads
         this.schedulers = new HashMap<>();
     }
 
-    public final Scheduler fxThread()
+    public Scheduler fxThread()
     {
         return schedulers.computeIfAbsent("fxThread", key -> Schedulers.fromExecutor(Platform::runLater));
     }
 
-    public final Scheduler eventThread()
+    public Scheduler eventThread()
     {
         return schedulers.computeIfAbsent("eventThread", key -> Schedulers.newSingle("eventThread"));
     }
 
-    public final Scheduler timerThread()
+    public Scheduler videoThread()
+    {
+        return schedulers.computeIfAbsent("videoThread", key -> Schedulers.newSingle("videoThread"));
+    }
+
+    public Scheduler timerThread()
     {
         return schedulers.computeIfAbsent("timerThread", key -> Schedulers.newSingle("timerThread"));
+    }
+
+    @PreDestroy
+    void closeAll()
+    {
+        for (Scheduler scheduler : this.schedulers.values())
+        {
+            scheduler.dispose();
+        }
     }
 }
