@@ -1,7 +1,7 @@
 package org.pfc.tarc;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.pfc.tarc.video.Video.*;
+import static org.pfc.tarc.video.VideoUtil.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
